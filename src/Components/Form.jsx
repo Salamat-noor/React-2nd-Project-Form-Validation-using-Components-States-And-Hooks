@@ -1,36 +1,43 @@
 import React, { useState } from "react";
-import App from "./TextAreaRow";
 
-export default function Form(props) {
+export default function Form() {
+
     const [namefield, setNameField] = useState("");
+    const [emailFiled, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [region, setRegion] = useState("");
+    const [gender, setGender] = useState("");
+    const [language, setLanguage] = useState([]);
+    const [comment, setComment] = useState("");
+
     const giveValue = (e) => {
         setNameField(e.target.value);
     };
     // ====================================
     // ******************NAME FIELD END********************
     // ====================================
-    const [emailFiled, setEmail] = useState("");
+
     const emailValid = (e) => {
         setEmail(e.target.value);
     };
     // ====================================
     // ******************Email FIELD END********************
     // ====================================
-    const [password, setPassword] = useState("");
+
     const passwordSetup = (e) => {
         setPassword(e.target.value);
     };
     // ====================================
     // ****************Password FIELD END********************
     // ====================================
-    const [region, setRegion] = useState("");
+
     const regionSelect = (e) => {
         setRegion(e.target.value)
     };
     // ====================================
     // ******************DropDown FIELD END****************
     // ====================================
-    const [gender, setGender] = useState("");
+
     const selectGender = (e) => {
         setGender(e.target.value);
     };
@@ -38,18 +45,24 @@ export default function Form(props) {
     // ====================================
     // ******************Gender FIELD END********************
     // ====================================
-    const [language, setLanguage] = useState([]);
+
     const languageSetup = (e) => {
+        const value = e.target.value;
         if (e.target.checked) {
-            setLanguage((prev => [...prev, [e.target.value]]));
+            // If checkbox is checked, add the value to the language array if it doesn't already exist
+            if (!language.includes(value)) {
+                setLanguage(prevLanguage => [...prevLanguage, value]);
+            }
         } else {
-            setLanguage((prev => [...prev, [e.target.value]].unshift()));
+            // If checkbox is unchecked, remove the value from the language array if it exists
+            setLanguage(prevLanguage => prevLanguage.filter(lang => lang !== value));
         }
     };
+
     // ====================================
     // **************Language FIELD END********************
     // ====================================
-    const [comment, setComment] = useState("");
+
     const commentSetup = (e) => {
         setComment(e.target.value);
     };
@@ -68,7 +81,6 @@ export default function Form(props) {
 
     return (
         <>
-            <App />
             <form className="p-5">
                 <div className="row mb-5">
                     <h2 className='text-success text-center border-bottom border-success'>Form Components : Validation : Form Submission</h2>
@@ -162,7 +174,7 @@ export default function Form(props) {
                 {/* ************ROW 4 Radio END************** */}
                 <div className="row mb-3">
                     <div className="col-sm-2 d-flex align-items-center">
-                        <label htmlFor="gender">Language's :</label>
+                        <label htmlFor="language">Language's :</label>
                     </div>
                     <div className="col-sm-10 d-flex align-items-center gap-5">
                         <div className="form-check">
@@ -220,68 +232,53 @@ export default function Form(props) {
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">{props.headingOne}</th>
-                        <th scope="col">{props.headingTwo}</th>
+                        <th scope="col">Propertie's</th>
+                        <th scope="col">Value's</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <th scope="row">1</th>
-                        <td>{props.nameFieldProp}</td>
+                        <td>Name</td>
                         <td>{namefield}</td>
                     </tr>
                     <tr>
                         <th scope="row">2</th>
-                        <td>{props.emailFieldProp}</td>
+                        <td>Email</td>
                         <td>{emailFiled}</td>
                     </tr>
                     <tr>
                         <th scope="row">3</th>
-                        <td>{props.passwordFieldProp}</td>
+                        <td>Password</td>
                         <td>{password}</td>
                     </tr>
                     <tr>
                         <th scope="row">4</th>
-                        <td>{props.regionFieldProp}</td>
+                        <td>Region</td>
                         <td>{region}</td>
                     </tr>
                     <tr>
                         <th scope="row">5</th>
-                        <td>{props.genderFieldProp}</td>
+                        <td>Gender</td>
                         <td>{gender}</td>
                     </tr>
                     <tr>
                         <th scope="row">6</th>
-                        <td>{props.languageFieldProp}</td>
-                        <td>{language}</td>
+                        <td>Language</td>
+                        {language.length > 0 ? (
+                            <td>{language.map((e, index) => (e + " - "))}</td>
+                        ) : (
+                            <td>{language[0]}</td>
+                        )}
+
                     </tr>
                     <tr className="gap-5">
                         <th scope="row">7</th>
-                        <td>{props.userComment}</td>
+                        <td>Comment</td>
                         <td>{comment}</td>
                     </tr>
                 </tbody>
             </table>
         </>
     );
-}
-
-
-
-Form.defaultProps = {
-    defaultDisplay: "Select Region",
-    regionOne: "Oceania",
-    regionTwo: "Europe",
-    regionThree: "Asia",
-    regionFour: "Americas",
-    regionFive: "Africa",
-    headingOne: "Properties",
-    headingTwo: "Values",
-    nameFieldProp: "Name",
-    emailFieldProp: "Email",
-    passwordFieldProp: "Password",
-    regionFieldProp: "Region",
-    genderFieldProp: "Gender",
-    languageFieldProp: "Language",
-    userComment: "Comment",
 }
